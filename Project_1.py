@@ -89,8 +89,6 @@ def input_data_to_user():
             nilai_input = input("> ")
 
         nilai_input = nilai_input.split(",")
-        print(nilai_input)
-        input()
         data_nilai = [
             20 / 100 * float(nilai_input[0]),
             10 / 100 * float(nilai_input[1]),
@@ -119,7 +117,46 @@ def input_data_to_user():
 
 
 def passing_data():
-    pass
+    db.execute(
+        "SELECT siswa.nim, siswa.nama, siswa.umur, siswa.jenisKelamin, nilai.tugas, nilai.kehadiran, nilai.uts, nilai.uas, nilai.total FROM nilai INNER JOIN siswa ON nilai.nim_siswa = siswa.nim"
+    )
+    result = db.fetchall()
+
+    if result:
+        print("-" * 100)
+        output = (
+            "|"
+            + "#".center(3)
+            + "|"
+            + "NIM".center(12)
+            + "|"
+            + "NAMA".center(len(max(result, key=len)[1]) + 2)
+        )
+        output += (
+            "|" + "UMUR".center(6) + "|" + "Jenis Kelamin".center(15) + "|" + " TUGAS "
+        )
+        output += (
+            "|"
+            + " KEHADIRAN "
+            + "|"
+            + " UTS "
+            + "|"
+            + " UAS "
+            + "|"
+            + "TOTAL".center(8)
+            + "|"
+        )
+        print(output)
+        for index, value in enumerate(result, 1):
+            nim, nama, umur, jenisKelamin, tugas, kehadiran, uts, uas, total = value
+            print(
+                f"|{str(index).center(3)}|{nim.center(12)}|{nama.center(len(max(result, key=len)[1]) + 2)}|{str(umur).center(6)}|{jenisKelamin.center(15)}|{str(tugas).center(7)}|{str(kehadiran).center(11)}|{str(uts).center(5)}|{str(uas).center(5)}|{str(total).center(8)}|"
+            )
+        print("-" * 100)
+        input("Tekan enter untuk kembali")
+    else:
+        warning = "Tidak ada data."
+    return True
 
 
 menu_list = [
